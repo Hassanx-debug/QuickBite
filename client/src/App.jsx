@@ -6,6 +6,8 @@ import CartDrawer from './components/cart/CartDrawer';
 import Footer from './components/layout/Footer';
 import Home from './pages/Home';
 import Menu from './pages/Menu';
+import Checkout from './pages/Checkout';
+import Orders from './pages/Orders';
 import NotFound from './pages/NotFound';
 
 function App() {
@@ -20,6 +22,8 @@ function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/menu" element={<Menu />} />
+                <Route path="/checkout" element={<Checkout />} />
+                <Route path="/orders" element={<Orders />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>
