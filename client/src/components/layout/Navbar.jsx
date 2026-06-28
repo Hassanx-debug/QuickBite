@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { ShoppingCart, User, Menu, X } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { ShoppingCart, User, Menu, X, LogOut } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthContext';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const { itemCount, toggleCart } = useCart();
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,6 +24,11 @@ const Navbar = () => {
     setMobileMenuOpen(false);
   }, [location]);
 
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
   return (
     <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
       <Link to="/" className="logo text-gradient">QuickBite</Link>
@@ -29,7 +37,8 @@ const Navbar = () => {
       <div className="nav-links hidden-mobile">
         <Link to="/" className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}>Home</Link>
         <Link to="/menu" className={`nav-link ${location.pathname === '/menu' ? 'active' : ''}`}>Menu</Link>
-        <Link to="/orders" className={`nav-link ${location.pathname === '/orders' ? 'active' : ''}`}>Orders</Link>
+        {user && <Link to="/orders" className={`nav-link ${location.pathname === '/orders' ? 'active' : ''}`}>Orders</Link>}
+        {user?.role === 'admin' && <Link to="/admin" className={`nav-link ${location.pathname === '/admin' ? 'active' : ''}`}>Admin</Link>}
       </div>
 
       <div className="nav-actions">
@@ -53,7 +62,16 @@ const Navbar = () => {
             }}>{itemCount}</span>
           )}
         </button>
-        <Link to="/login" className="btn btn-primary hidden-mobile">Sign In</Link>
+        {user ? (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginLeft: '1rem' }}>
+            <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }} className="hidden-mobile">Hi, {user.name.split(' ')[0]}</span>
+            <button onClick={handleLogout} className="btn btn-ghost" style={{ padding: '0.5rem', color: 'var(--error)' }} title="Logout">
+              <LogOut size={20} />
+            </button>
+          </div>
+        ) : (
+          <Link to="/login" className="btn btn-primary hidden-mobile">Sign In</Link>
+        )}
       </div>
     </nav>
   );
