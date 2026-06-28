@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 import { TrendingUp, Users, DollarSign, Package, Settings, Plus, Trash2, Edit } from 'lucide-react';
 import { Link, Navigate } from 'react-router-dom';
 
