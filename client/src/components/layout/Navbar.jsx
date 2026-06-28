@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ShoppingCart, User, Menu, X } from 'lucide-react';
+import { useCart } from '../../context/CartContext';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const { itemCount, toggleCart } = useCart();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,23 +33,25 @@ const Navbar = () => {
       </div>
 
       <div className="nav-actions">
-        <button className="btn btn-ghost" style={{ position: 'relative' }}>
+        <button className="btn btn-ghost" style={{ position: 'relative' }} onClick={toggleCart}>
           <ShoppingCart size={24} color="var(--text-primary)" />
-          <span style={{
-            position: 'absolute',
-            top: '-5px',
-            right: '-5px',
-            background: 'var(--accent)',
-            color: 'white',
-            borderRadius: '50%',
-            width: '20px',
-            height: '20px',
-            fontSize: '0.75rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontWeight: 'bold'
-          }}>0</span>
+          {itemCount > 0 && (
+            <span style={{
+              position: 'absolute',
+              top: '-5px',
+              right: '-5px',
+              background: 'var(--accent)',
+              color: 'white',
+              borderRadius: '50%',
+              width: '20px',
+              height: '20px',
+              fontSize: '0.75rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontWeight: 'bold'
+            }}>{itemCount}</span>
+          )}
         </button>
         <Link to="/login" className="btn btn-primary hidden-mobile">Sign In</Link>
       </div>
